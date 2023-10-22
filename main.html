@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+      <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
+    <style>
+        /* 기본 button 태그 스타일 리셋 */
+        button {
+          background: none;
+          border: none;
+          padding: 0;
+          margin: 0;
+          font: inherit;
+          cursor: pointer;
+          outline: inherit;
+        }
+
+        .category-button {
+          height: 60px;
+          color: black;
+          display: inline-block;
+          padding: 8px;
+          padding-left: 13px;
+          padding-right: 13px;
+          background-color: #d9d9d9;
+          border-radius: 10px;
+          font-size: 40px;
+          margin-right: 5px;
+          margin-bottom: 10px;
+        }
+
+        .category-button.selected {
+            color: white;
+            background: #85aee0;
+        }
+
+        .category-buttons {
+            width: 1920px;
+        }
+    </style>
+    <title>InfoMingle</title>
+  </head>
+  <header>
+    <a href="/">
+        <img class="header-logo" src="{% static '/images/infomingle_logo.png' %}"/>
+    </a>
+    <a href="information/" style="text-decoration: none">
+        <span class="header-link">이용안내</span>
+    </a>
+    <a href="{% url 'summary_news_page' %}" style="text-decoration: none; padding-left: 130px">
+        <span class="header-link">기사 요약</span>
+    </a>
+    <a href="{% url 'category_news_page' %}" style="text-decoration: none; padding-left: 130px">
+        <span class="header-link">카테고리 뉴스</span>
+    </a>
+  </header>
+  <body background="{% static '/images/background.png' %}">
+    <div class="main-title">
+      <span style="padding: 0 0 40px 0">
+        <a href="/"
+          ><img
+            class="main-body-logo"
+            src="{% static '/images/infomingle_logo.png' %}"
+        /></a>
+      </span>
+    </div>
+
+    <div class="main-content">
+      <div class="main-inner">
+        <div class="main-banner-box">
+          <div class="description-title">토픽</div>
+          <div class="main-banner-box-big">
+
+          </div>
+<!--          <div class="main-banner-box-big">-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=general">-->
+<!--              <div class="main-banner-box-topic">종합</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=business">-->
+<!--              <div class="main-banner-box-topic">비즈니스</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=entertainment">-->
+<!--              <div class="main-banner-box-topic">엔터테인먼트</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=health">-->
+<!--              <div class="main-banner-box-topic">헬스/건강</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=sports">-->
+<!--              <div class="main-banner-box-topic">스포츠</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=science">-->
+<!--              <div class="main-banner-box-topic">과학</div>-->
+<!--            </a>-->
+<!--            <a href="{% url 'word_cloud_category_image' %}?category=technology">-->
+<!--              <div class="main-banner-box-topic">기술</div>-->
+<!--            </a>-->
+<!--          </div>-->
+
+          <div class="main-banner-box-big">
+            <button class="category-button" data-category="general">종합</button>
+            <button class="category-button" data-category="buiseness">비즈니스</button>
+            <button class="category-button" data-category="entertainment">엔터테인먼트</button>
+            <button class="category-button" data-category="health">헬스/건강</button>
+            <button class="category-button" data-category="sports">스포츠</button>
+            <button class="category-button" data-category="science">과학</button>
+            <button class="category-button" data-category="technology">기술</button>
+          </div>
+          <img
+            class="main-banner-box-img"
+            src="{% static '/images/main-banner.png' %}"
+          />
+        </div>
+        <div class="main-ranking-box">
+          <div class="description-title">오늘의 뉴스 키워드</div>
+          <div class="main-ranking-box-border">
+          {% if tags %}
+              {% for tag in tags %}
+              <a href="#">
+                  <div class="main-ranking-box-border-numNtext">
+                      <div class="main-ranking-box-border-number">{{ forloop.counter }}</div>
+                      <div class="main-ranking-box-border-text">{{ tag.0 }}</div>
+                  </div>
+              </a>
+              {% endfor %}
+          {% else %}
+            <div style="display:flex; align-items:center; justify-content: center; height: 100%">
+              <div style="text-align: center; font-size:35px; vertical-align: middle;">결과값 없음</div>
+            </div>
+          {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="main-wordcloud">
+        <div class="main-wordcloud-title">
+          워드클라우드
+          <div class="main-wordcloud-date" text-aligen="right">
+            <img class="main-wordcloud-calender" src="{% static '/images/calender.png' %}" />
+            <script>
+              const today = new Date();
+              const lastweek = new Date();
+              lastweek.setDate(today.getDate() - 7); // 일주일 전 날짜 설정
+              function formatDate(date) {
+                let dd = date.getDate();
+                let mm = date.getMonth() + 1; // January is 0!
+                const yyyy = date.getFullYear();
+                if (dd < 10) {
+                  dd = '0' + dd;
+                }
+                if (mm < 10) {
+                  mm = '0' + mm;
+                }
+                return yyyy + '-' + mm + '-' + dd;
+              }
+              document.write(" " + formatDate(lastweek) + " ~ " + formatDate(today));
+            </script>
+          </div>
+        </div>
+        <div class="main-wordcloud-date"></div>
+        <div class="main-wordcloud-border">
+          <div class="main-wordcloud-categori-box">
+            <div class="main-wordcloud-categori">
+              <img src="{% static '/images/blue-dot.png' %}" /> 인물
+            </div>
+            <div class="main-wordcloud-categori">
+              <img src="{% static '/images/red-dot.png' %}" /> 장소
+            </div>
+            <div class="main-wordcloud-categori">
+              <img src="{% static '/images/green-dot.png' %}" /> 기관
+            </div>
+          </div>
+          <div class="main-wordcloud-img-box">
+            {#<img class="main-wordcloud-img" src="{% url 'word_cloud_image' %}" alt="Word Cloud" /> <!-- 워드클라우드 이미지 표시!! -->#}
+            <img class="main-wordcloud-img" src="{% url 'word_cloud_category_image' %}" alt="Word Cloud" /> <!-- 워드클라우드 이미지 표시!! -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+      <script>
+        function getCategoryFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('category') || 'general';
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const currentCategory = getCategoryFromUrl();
+            document.querySelectorAll('.category-button').forEach(function(button) {
+                const buttonCategory = button.getAttribute('data-category');
+                if (buttonCategory === currentCategory) {
+                    button.classList.add('selected');
+                }
+
+                button.addEventListener('click', function() {
+                    // 모든 버튼의 'selected' 클래스를 제거
+                    document.querySelectorAll('.category-button').forEach(function(btn) {
+                        btn.classList.remove('selected');
+                    });
+                    // 현재 클릭한 버튼에 'selected' 클래스 추가
+                    button.classList.add('selected');
+
+                    // 버튼에 연결된 카테고리로 페이지 URL 업데이트
+                    window.location.href = '/?category=' + buttonCategory;
+                });
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('span[data-description]').forEach(span => {
+                const originalText = span.getAttribute('data-description');
+                const newText = originalText.replace(/&nbsp;|&apos;/g, '');
+                span.textContent = newText;
+            });
+        });
+    </script>
+  </body>
+  <footer>
+    <div class="footer-content">
+      <div>
+        <img
+          class="footer-logo"
+          src="{% static '/images/infomingle_logo.png' %}"
+        />
+      </div>
+      <div class="footer-dev-name">202020954 오유진</div>
+      <div class="footer-dev-name-2">202020845 김성혜</div>
+      <div class="footer-divider"></div>
+      <div class="email">aktnftk358@kku.ac.kr</div>
+      <div class="email-2">ksh15911@kku.ac.kr</div>
+    </div>
+  </footer>
+</html>
+
+<javascript>
+
+</javascript>
